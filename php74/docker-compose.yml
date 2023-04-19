@@ -1,0 +1,46 @@
+version: '3'
+services:
+  nginx:
+    dns:
+      - 8.8.8.8
+      - 4.4.4.4
+    build:
+      context: ./images
+      dockerfile: nginx.Dockerfile
+    working_dir: /var/www/html
+    container_name: nginx
+    ports:
+      - '80:80'
+      - '8000:8000'
+    volumes:
+      - '../projects:/var/www/html'
+      - './logs/nginx_log:/var/log/nginx'
+      - ./config/nginx:/etc/nginx/conf.d
+    links:
+      - php74
+      - mysqlv8
+  php74:
+    build:
+      context: ./images
+      dockerfile: php74.Dockerfile
+    container_name: php74
+    restart: always
+    ports:
+      - '9000:9000'
+    volumes:
+      - '../projects:/var/www/html'
+      - './php74/logs/php-fpm.log:/var/log/php-fpm.log'
+      - './config/php74/custom.ini:/opt/bitnami/php/etc/conf.d/custom.ini'
+  mysqlv8:
+    build:
+      context: ./images
+      dockerfile: mysql.Dockerfile
+    container_name: mysqlv8
+    restart: always
+    ports:
+      - '3310:3306'
+    volumes:
+      - './data/mysql:/var/lib/mysql'
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: dbtest
