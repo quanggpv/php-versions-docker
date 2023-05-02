@@ -11,14 +11,26 @@ services:
     container_name: nginx
     ports:
       - '80:80'
-      - '8000:8000'
     volumes:
       - '../projects:/var/www/html'
-      - './logs/nginx_log:/var/log/nginx'
-      - ./config/nginx:/etc/nginx/conf.d
+      - './nginx_log:/var/log/nginx'
+      - ./config/nginx/:/etc/nginx/conf.d/
     links:
+      - php81
       - php74
       - mysqlv8
+  php81:
+    build:
+      context: ./images
+      dockerfile: php81.Dockerfile
+    container_name: php81
+    restart: always
+    ports:
+      - '9003:9000'
+    volumes:
+      - '../projects:/var/www/html'
+      - './php81/logs/:/var/log/php-fpm.log'
+      - './config/php81/custom.ini:/opt/bitnami/php/etc/conf.d/custom.ini'
   php74:
     build:
       context: ./images
@@ -29,7 +41,7 @@ services:
       - '9000:9000'
     volumes:
       - '../projects:/var/www/html'
-      - './php74/logs/php-fpm.log:/var/log/php-fpm.log'
+      - './php74/logs/:/var/log/php-fpm.log'
       - './config/php74/custom.ini:/opt/bitnami/php/etc/conf.d/custom.ini'
   mysqlv8:
     build:
@@ -38,9 +50,10 @@ services:
     container_name: mysqlv8
     restart: always
     ports:
-      - '3310:3306'
+      - '3307:3306'
     volumes:
       - './data/mysql:/var/lib/mysql'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: dbtest
+  

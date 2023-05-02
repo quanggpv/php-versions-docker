@@ -82,5 +82,7 @@ RUN php composer-setup.php --quiet && rm composer-setup.php && \
 	mv composer.phar /usr/local/sbin/composer && \
 	chmod +x /usr/local/sbin/composer
 	
+EXPOSE 9000
+
 # Clean up
 CMD bash -c "cron && php-fpm"

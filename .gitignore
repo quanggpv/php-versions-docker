@@ -1,8 +1,6 @@
-php81/data/
-php81/logs/
-php81/php81/
-php74/data/
-php74/logs/
-php74/php81/
+php/data/
+php/nginx_log/
+php/php81/
+php/php74/
 projects/
 
