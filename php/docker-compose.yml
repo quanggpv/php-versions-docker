@@ -32,6 +32,18 @@ services:
       - '../projects:/var/www/html'
       - './php81/logs/:/var/log/php-fpm.log'
       - './config/php81/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
+  php80:
+    build:
+      context: ./images
+      dockerfile: php80.Dockerfile
+    container_name: php80
+    restart: always
+    ports:
+      - '9005:9000'
+    volumes:
+      - '../projects:/var/www/html'
+      - './php80/logs/:/var/log/php-fpm.log'
+      - './config/php80/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
   php74:
     build:
       context: ./images
@@ -44,6 +56,18 @@ services:
       - '../projects:/var/www/html'
       - './php74/logs/:/var/log/php-fpm.log'
       - './config/php74/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
+  php71:
+    build:
+      context: ./images
+      dockerfile: php71.Dockerfile
+    container_name: php71
+    restart: always
+    ports:
+      - '9001:9000'
+    volumes:
+      - '../projects:/var/www/html'
+      - './php71/logs/:/var/log/php-fpm.log'
+      - './config/php71/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
   redis:
     image: redis:6.2-alpine
     container_name: redis
@@ -57,11 +81,27 @@ services:
       dockerfile: mysql.Dockerfile
     container_name: mysqlv8
     restart: always
+    working_dir: '/usr/share/'
     ports:
-      - '3310:3306'
+      - '3308:3306'
     volumes:
       - './data/mysql:/var/lib/mysql'
       - './db:/docker-entrypoint-initdb.d'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: dbtest
+  mariadb10:
+    build:
+      context: ./images
+      dockerfile: mariadb.Dockerfile
+    container_name: mariadb10
+    restart: always
+    working_dir: '/usr/share/'
+    ports:
+      - '3303:3306'
+    volumes:
+      - './data/mariadb:/var/lib/mysql'
+      - './mariadb:/docker-entrypoint-initdb.d'
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: mariadb
