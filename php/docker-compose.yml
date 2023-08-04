@@ -98,10 +98,37 @@ services:
     restart: always
     working_dir: '/usr/share/'
     ports:
-      - '3303:3306'
+      - '3304:3306'
     volumes:
       - './data/mariadb:/var/lib/mysql'
       - './mariadb:/docker-entrypoint-initdb.d'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: mariadb
+  supervisor:
+    image: php74:latest
+    container_name: supervisor
+    restart: always
+    volumes:
+      - '../projects:/var/www/html'
+      - './config/supervisor:/etc/supervisor/conf.d/'
+    command: ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+  cronjob:
+    image: php74:latest
+    container_name: cronjob
+    restart: always
+    volumes:
+      - '../projects:/var/www/html'
+      - './config/cronjob:/etc/cron.d'
+    command: ["cron", "-f", "-l", "8"]
+  nestjs:
+    build:
+      context: ./images
+      dockerfile: nestjs.Dockerfile
+    container_name: nestjs
+    restart: always
+    working_dir: '/var/www/html/project-test'
+    ports:
+      - '3000:3000'
+    volumes:
+      - '../projects:/var/www/html'

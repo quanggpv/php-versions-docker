@@ -81,6 +81,15 @@ RUN EXPECTED_CHECKSUM="$(wget -q -O - https://composer.github.io/installer.sig)"
 RUN php composer-setup.php --quiet && rm composer-setup.php && \
 	mv composer.phar /usr/local/sbin/composer && \
 	chmod +x /usr/local/sbin/composer
+
+# Update package lists and install necessary dependencies
+RUN apt-get update && \
+    apt-get install -y supervisor
+
+# Create the log directory for Supervisor
+RUN mkdir -p /var/log/supervisor
+
+RUN apt-get install -y cron
 	
 EXPOSE 9000
 
