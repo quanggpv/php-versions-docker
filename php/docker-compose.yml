@@ -112,7 +112,7 @@ services:
     restart: always
     volumes:
       - '../projects:/var/www/html'
-      - './images/config/supervisor:/etc/supervisor/conf.d/'
+      - './images/config/php74/supervisor:/etc/supervisor/conf.d/'
     command: ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
   nestjs:
     build:

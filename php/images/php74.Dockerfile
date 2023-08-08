@@ -97,7 +97,7 @@ RUN chmod 777 /var/log/cron.log
 
 RUN chmod 777 -R /etc/cron.d/.
 
-COPY ./config/cronjob/cron /etc/cron.d/cron
+COPY ./config/php74/cronjob/cron /etc/cron.d/cron
 
 RUN crontab /etc/cron.d/cron
 	
