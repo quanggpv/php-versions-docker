@@ -90,8 +90,18 @@ RUN apt-get update && \
 RUN mkdir -p /var/log/supervisor
 
 RUN apt-get install -y cron
+
+RUN touch /var/log/cron.log
+
+RUN chmod 777 /var/log/cron.log
+
+RUN chmod 777 -R /etc/cron.d/.
+
+COPY ./config/cronjob/cron /etc/cron.d/cron
+
+RUN crontab /etc/cron.d/cron
 	
 EXPOSE 9000
 
 # Clean up
-CMD bash -c "cron && php-fpm"
+CMD bash -c "cron -f && php-fpm"

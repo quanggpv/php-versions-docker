@@ -13,8 +13,8 @@ services:
       - '80:80'
     volumes:
       - '../projects:/var/www/html'
-      - './nginx_log:/var/log/nginx'
-      - ./config/nginx/:/etc/nginx/conf.d/
+      - './images/logs/nginx:/var/log/nginx'
+      - './images/config/nginx/:/etc/nginx/conf.d/'
     links:
       - php81
       - php74
@@ -30,8 +30,8 @@ services:
       - '9003:9000'
     volumes:
       - '../projects:/var/www/html'
-      - './php81/logs/:/var/log/php-fpm.log'
-      - './config/php81/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
+      - './images/logs/php81:/var/log/php-fpm.log'
+      - './images/config/php81/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
   php80:
     build:
       context: ./images
@@ -42,8 +42,8 @@ services:
       - '9005:9000'
     volumes:
       - '../projects:/var/www/html'
-      - './php80/logs/:/var/log/php-fpm.log'
-      - './config/php80/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
+      - './images/logs/php80:/var/log/php-fpm.log'
+      - './images/config/php80/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
   php74:
     build:
       context: ./images
@@ -54,8 +54,9 @@ services:
       - '9000:9000'
     volumes:
       - '../projects:/var/www/html'
-      - './php74/logs/:/var/log/php-fpm.log'
-      - './config/php74/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
+      - './images/logs/php74:/var/log/php-fpm.log'
+      - './images/config/php74/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
+      - './images/config/cronjob:/etc/cron.d'
   php71:
     build:
       context: ./images
@@ -66,8 +67,8 @@ services:
       - '9001:9000'
     volumes:
       - '../projects:/var/www/html'
-      - './php71/logs/:/var/log/php-fpm.log'
-      - './config/php71/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
+      - './images/logs/php71/:/var/log/php-fpm.log'
+      - './images/config/php71/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
   redis:
     image: redis:6.2-alpine
     container_name: redis
@@ -86,7 +87,7 @@ services:
       - '3308:3306'
     volumes:
       - './data/mysql:/var/lib/mysql'
-      - './db:/docker-entrypoint-initdb.d'
+      - './images/sql_dump/mysql:/docker-entrypoint-initdb.d'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: dbtest
@@ -101,7 +102,7 @@ services:
       - '3304:3306'
     volumes:
       - './data/mariadb:/var/lib/mysql'
-      - './mariadb:/docker-entrypoint-initdb.d'
+      - './images/sql_dump/maria:/docker-entrypoint-initdb.d'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: mariadb
@@ -111,16 +112,8 @@ services:
     restart: always
     volumes:
       - '../projects:/var/www/html'
-      - './config/supervisor:/etc/supervisor/conf.d/'
+      - './images/config/supervisor:/etc/supervisor/conf.d/'
     command: ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
-  cronjob:
-    image: php74:latest
-    container_name: cronjob
-    restart: always
-    volumes:
-      - '../projects:/var/www/html'
-      - './config/cronjob:/etc/cron.d'
-    command: ["cron", "-f", "-l", "8"]
   nestjs:
     build:
       context: ./images

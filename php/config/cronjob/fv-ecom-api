@@ -1,1 +1,0 @@
-* * * * * cd /var/www/html/fv-ecom-api && php artisan schedule:run >> /var/log/cron.log

@@ -1,6 +1,5 @@
 php/data/
-php/nginx_log/
-php/php81/
-php/php74/
+php/images/logs
+php/images/sql_dump
 projects/
 
