@@ -8,7 +8,7 @@ Don't forget to add your virtual hosts to the hosts file.
 
 
 Some notes:
-- Currently, queue was config in supervisor, supervisor & cron job are just installed in `php74` image. If you use them for other php verions, just copy images & change those names
+- Currently, queue was configured in supervisor, supervisor & cron job are just installed in `php74` image. If you use them for other php verions, just copy images & change those names
 - The log files for supervisor are config in supervisor.conf, 'stdout_logfile' = 'path/to/your_log_file'
 
 
