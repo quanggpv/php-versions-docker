@@ -1,3 +1,0 @@
-* * * * * /usr/local/bin/php /var/www/html/fv-ecom-api/artisan schedule:run >> /var/log/cron.log 2>&1
-* * * * * /usr/local/bin/php /var/www/html/data-sync/artisan schedule:run >> /var/log/cron.log 2>&1
-
