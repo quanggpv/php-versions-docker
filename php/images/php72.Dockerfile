@@ -3,7 +3,7 @@ FROM php:7.2-fpm
 ARG UNAME
 ARG UID
 ARG GID
-
+ARG PASS_SUDO
 # Create a group with the specified GID
 RUN groupadd -g $GID $UNAME
 
@@ -75,6 +75,16 @@ RUN php composer-setup.php --quiet && rm composer-setup.php && \
 	
 # Clean up
 RUN apt-get remove -y git && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+# Set a password for the user (change 'password' to your desired password)
+RUN echo "quangpv:${PASS_SUDO}" | chpasswd
+
+# Install sudo
+RUN apt-get update && apt-get install -y sudo
+
+# Add the user to the sudo group
+RUN usermod -aG sudo $UNAME
 
 USER $UNAME
 	

@@ -68,6 +68,7 @@ services:
         UNAME: quangpv
         UID: 1000
         GID: 1000
+        PASS_SUDO: quangpv
     container_name: php72
     restart: always
     ports:
