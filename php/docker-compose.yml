@@ -60,6 +60,22 @@ services:
       - './images/logs/php71:/var/log/php-fpm.log'
       - './images/config/php71/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
       - './images/config/cronjob:/etc/cron.d'
+  php72:
+    build:
+      context: ./images
+      dockerfile: php72.Dockerfile
+      args:
+        UNAME: quangpv
+        UID: 1000
+        GID: 1000
+    container_name: php72
+    restart: always
+    ports:
+      - '9020:9000'
+    volumes:
+      - '../projects:/var/www/html'
+    env_file:
+      - .env-docker
   redis:
     image: redis:6.2-alpine
     container_name: redis
