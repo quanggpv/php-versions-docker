@@ -60,23 +60,6 @@ services:
       - './images/logs/php71:/var/log/php-fpm.log'
       - './images/config/php71/custom.ini:/usr/local/etc/php/conf.d/custom.ini'
       - './images/config/cronjob:/etc/cron.d'
-  php72:
-    build:
-      context: ./images
-      dockerfile: php72.Dockerfile
-      args:
-        UNAME: quangpv
-        UID: 1000
-        GID: 1000
-        PASS_SUDO: quangpv
-    container_name: php72
-    restart: always
-    ports:
-      - '9020:9000'
-    volumes:
-      - '../projects:/var/www/html'
-    env_file:
-      - .env-docker
   redis:
     image: redis:6.2-alpine
     container_name: redis
@@ -119,7 +102,10 @@ services:
     container_name: postgres14
     restart: always
     ports:
-      - '5433:5432'
+      - '5434:5432'
+    volumes:
+      - './data/postgres:/var/lib/postgresql/data'
+      - './images/sql_dump/postgres:/docker-entrypoint-initdb.d'
     environment:
       POSTGRES_DB: dbtest
       POSTGRES_USER: dev
@@ -138,5 +124,38 @@ services:
       - '9201:9201'
       - '9229:9229'
       - '3001:3001'
+      - '4000:4000'
     volumes:
       - '../projects:/var/www/html'
+  mysql-master:
+    build:
+      context: ./images
+      dockerfile: mysql.Dockerfile
+    container_name: mysql-master
+    restart: always
+    working_dir: '/usr/share/'
+    ports:
+      - '3309:3306'
+    volumes:
+      - './data/mysql-master:/var/lib/mysql'
+      - './images/sql_dump/mysql-master:/docker-entrypoint-initdb.d'
+    environment:
+      MYSQL_DATABASE: 'mydatabase'
+      MYSQL_USER: 'replication_user'
+      MYSQL_PASSWORD: '123456'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+  mysql-slave:
+    image: mysqlv8:latest
+    container_name: mysql-slave
+    restart: always
+    working_dir: '/usr/share/'
+    ports:
+      - '3310:3306'
+    volumes:
+      - './data/mysql-slave:/var/lib/mysql'
+      - './images/sql_dump/mysql-slave:/docker-entrypoint-initdb.d'
+    environment:
+      MYSQL_DATABASE: 'mydatabase'
+      MYSQL_USER: 'replication_user'
+      MYSQL_PASSWORD: '123456'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
