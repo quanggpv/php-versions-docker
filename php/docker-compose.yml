@@ -139,9 +139,10 @@ services:
     volumes:
       - './data/mysql-master:/var/lib/mysql'
       - './images/sql_dump/mysql-master:/docker-entrypoint-initdb.d'
+      - './images/config/mysql-master:/etc/mysql/conf.d'
     environment:
       MYSQL_DATABASE: 'mydatabase'
-      MYSQL_USER: 'replication_user'
+      MYSQL_USER: 'replicate'
       MYSQL_PASSWORD: '123456'
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
   mysql-slave:
@@ -154,8 +155,9 @@ services:
     volumes:
       - './data/mysql-slave:/var/lib/mysql'
       - './images/sql_dump/mysql-slave:/docker-entrypoint-initdb.d'
+      - './images/config/mysql-slave:/etc/mysql/conf.d'
     environment:
       MYSQL_DATABASE: 'mydatabase'
-      MYSQL_USER: 'replication_user'
+      MYSQL_USER: 'replicate'
       MYSQL_PASSWORD: '123456'
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
