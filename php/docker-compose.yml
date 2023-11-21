@@ -128,9 +128,7 @@ services:
     volumes:
       - '../projects:/var/www/html'
   mysql-master:
-    build:
-      context: ./images
-      dockerfile: mysql.Dockerfile
+    image: mysqlv8:latest
     container_name: mysql-master
     restart: always
     working_dir: '/usr/share/'
